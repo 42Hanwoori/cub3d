@@ -172,8 +172,7 @@ int exit_error(t_set *set)
 	ft_putstr("Error\n");
 	if (set->fd)
 		close(set->fd);
-	exit(0);
-	return (-1);
+	exit(1);
 }
 
 int	cal_floor_ceiling_color(t_color color)
@@ -217,7 +216,7 @@ void	ft_free(void *s)
 
 int		ft_close(void)
 {
-	exit(1);
+	exit(0);
 	return (0);
 }
 
@@ -388,7 +387,7 @@ void	draw_player(t_set *set)
 	angle_count = -1;
 	while (++angle_count < set->width)
 	{
-		if (angle_count % 7 == 0)
+		if (angle_count % 1 == 0)
 			render_ray(set, &set->ray[angle_count]);
 	}
 	draw_player_nose(set);
@@ -398,7 +397,7 @@ int		inside_wall(t_set *set, double next_x, double next_y)
 {
 	int map_x;
 	int map_y;
-		
+
 	if(next_x < 0 || next_x > (TILE_SIZE * set->map_width) || next_y < 0 || next_y > (set->map_height * TILE_SIZE))
 		return (1);
 	map_x = floor(next_x / TILE_SIZE);
@@ -537,6 +536,12 @@ void	init_ray(t_ray *ray, double ray_angle) // 방향확인 for xystep 더할지
 	ray->ray_facing_right = ray->ray_angle < 0.5 * PI || ray->ray_angle > 1.5 * PI;
 	ray->ray_facing_left = !ray->ray_facing_right;
 	ray->was_hit_vertical = 0;
+	ray->wall_hit_x = 0;
+	ray->wall_hit_y = 0;
+	ray->found_horz_wall_hit = 0;
+	ray->found_vert_wall_hit = 0;
+	ray->h_dist = 0;
+	ray->v_dist = 0;
 }
 
 void	check_ray_hit_horz_set(t_set *set, t_ray *ray)
@@ -606,8 +611,8 @@ void	check_ray_hit_vert(t_set *set, t_ray *ray, double *wall_vert_x, double *wal
 	next_vert_x = ray->x_intercept;
 	x_to_check = ray->x_intercept;
 	next_vert_y = ray->y_intercept;
-	while (next_vert_x >=0 && next_vert_x <= set->width * TILE_SIZE && next_vert_y >= 0 \
-	&& next_vert_y <= set->height * TILE_SIZE)
+	while (next_vert_x >=0 && next_vert_x <= set->map_width * TILE_SIZE && next_vert_y >= 0 \
+	&& next_vert_y <= set->map_height * TILE_SIZE)
 	{
 		x_to_check = next_vert_x;
 		if (ray->ray_facing_left)
@@ -672,7 +677,6 @@ void	ray_casting(t_set *set)
 
 	ray_count = -1;
 	ray_angle = set->player.player_angle - (FOV / 2);
-	//malloc
 	while (++ray_count < set->width)
 	{
 		init_ray(&set->ray[ray_count], ray_angle);
@@ -717,14 +721,12 @@ void	wall_init(t_set *set, t_wall *wall, int i)
 		wall->wall_strip_y_bottom = set->height;
 }
 
-//char	check_dir_of_wall(t_ray *ray);
-
 int		texture_by_wall_dir(t_set *set, int x, int y, int i)
 {
 	if (set->ray[i].was_hit_vertical) // 동 or 서
 	{
 		if (set->ray[i].ray_facing_left) //서
-			return ((set->texture)[1][TEXTURE_WIDTH * y + 64 - x]);
+			return ((set->texture)[1][TEXTURE_WIDTH * y + 64 - x - 1]);
 		else // 동 
 			return ((set->texture)[0][TEXTURE_WIDTH * y + x]);
 	}
@@ -733,7 +735,7 @@ int		texture_by_wall_dir(t_set *set, int x, int y, int i)
 		if (set->ray[i].ray_facing_up)//북
 			return ((set->texture)[3][TEXTURE_WIDTH * y + x]);
 		else // 남
-			return ((set->texture)[2][TEXTURE_WIDTH * y + 64 - x]);
+			return ((set->texture)[2][TEXTURE_WIDTH * y + 64 - x - 1]);
 	}
 }
 
@@ -961,6 +963,8 @@ int		main_loop(t_set *set)
 	mlx_put_image_to_window(set->mlx, set->win, set->img.img, 0, 0);
 	draw_mini_map(set);
 	mlx_put_image_to_window(set->mlx, set->win, set->img.img, 0, 0);
+	// free(set->ray);
+	// set->ray = NULL;
 	return (0);
 }
 
@@ -1089,7 +1093,7 @@ void	init_player(t_player *player)
 	player->rad = 4;
 	player->walk_dir = 0;
 	player->turn_dir = 0;
-	player->walk_speed = 10;
+	player->walk_speed = 20;
 	player->turn_speed = 2 * (PI / 180);
 	player->right_move = 0;
 	player->left_move = 0;
@@ -1291,7 +1295,7 @@ int	init_map(t_set *set, t_list *lst)
 
 	i = 0;
 	set->map_height = ft_lstsize(lst);
-	set->map = (char **)malloc(sizeof(char *) * (set->height + 1));
+	set->map = (char **)malloc(sizeof(char *) * (set->map_height + 1));
 	if (set->map == 0)
 		return exit_error(set);
 	set->map_width = get_max_line_size(lst);
@@ -1597,7 +1601,7 @@ int		set_information(t_set *set, char *path)
 	if (!init_texture(set))
 		return (exit_error(set));
 	load_texture(set);
-	set->ray = (t_ray *)malloc(sizeof(t_ray) * set->width);//////////////////////////////////
+	set->ray = (t_ray *)malloc(sizeof(t_ray) * set->width);
 	set->img.img = mlx_new_image(set->mlx, set->width, set->height);
 	set->img.data = (int *)mlx_get_data_addr(\
 		set->img.img, &set->img.bpp, &set->img.size_l, &set->img.endian);
@@ -1614,8 +1618,6 @@ int		main(int argc, char **argv)
 		return (exit_error(&set));
 	if (argc == 3 && !ft_strcmp(argv[2], "--save"))
 		return (process_bmp(&set));
-	else if (argc >= 3)
-		return (exit_error(&set));
 	else
 		process_program(&set);
 	return (0);
