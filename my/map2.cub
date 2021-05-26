@@ -1,0 +1,15 @@
+R 1000 1000
+NO /Users/han_woori/Desktop/cub3d/my/textures/redbrick.xpm
+WE /Users/han_woori/Desktop/cub3d/my/textures/colorstone.xpm
+EA /Users/han_woori/Desktop/cub3d/my/textures/mossy.xpm
+SO /Users/han_woori/Desktop/cub3d/my/textures/bluestone.xpm
+
+S /Users/han_woori/Desktop/cub3d/my/textures/barrel.xpm
+F 30,100,0
+C 1,2,3
+
+1111111111
+1000000001
+1000N00001
+1000000001
+1111111111
