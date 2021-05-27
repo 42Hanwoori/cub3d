@@ -84,6 +84,8 @@ int				process_bmp(t_set *set)
 	draw_sprite(set);
 	fd = open("output.bmp"
 					, O_WRONLY | O_TRUNC | O_CREAT, 0744);
+	if (fd == -1)
+		return (-1);
 	ft_file_header(set, fd);
 	ft_image_header(set, fd);
 	ft_save_buffer(set, fd);

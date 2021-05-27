@@ -12,8 +12,6 @@ void	init_ray(t_ray *ray, double ray_angle)
 	ray->ray_angle > 1.5 * PI;
 	ray->ray_facing_left = !ray->ray_facing_right;
 	ray->was_hit_vertical = 0;
-	ray->wall_hit_x = 0;
-	ray->wall_hit_y = 0;
 	ray->found_horz_wall_hit = 0;
 	ray->found_vert_wall_hit = 0;
 	ray->h_dist = 0;
