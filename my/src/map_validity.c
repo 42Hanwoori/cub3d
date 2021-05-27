@@ -47,7 +47,7 @@ int	rigth_test(t_set *set, int i, int j)
 			return (1);
 		if (set->map[i][j] == ' ')
 			return (0);
-		j++; 
+		j++;
 	}
 	return (0);
 }

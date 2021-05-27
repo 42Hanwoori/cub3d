@@ -75,10 +75,10 @@ void			ft_save_buffer(t_set *set, int fd)
 	}
 }
 
-
-int		process_bmp(t_set *set)
+int				process_bmp(t_set *set)
 {
 	int	fd;
+
 	ray_casting(set);
 	draw_3d_wall(set);
 	draw_sprite(set);

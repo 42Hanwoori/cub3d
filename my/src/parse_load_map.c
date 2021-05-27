@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int	init_map(t_set *set, t_list *lst)
+int		init_map(t_set *set, t_list *lst)
 {
 	int i;
 	int j;
@@ -9,13 +9,13 @@ int	init_map(t_set *set, t_list *lst)
 	set->map_height = ft_lstsize(lst);
 	set->map = (char **)malloc(sizeof(char *) * (set->map_height + 1));
 	if (set->map == 0)
-		return exit_error(set);
+		return (exit_error(set, "map m-alloc failed"));
 	set->map_width = get_max_line_size(lst);
 	while (lst)
 	{
 		set->map[i] = (char *)malloc(sizeof(char) * (set->map_width + 1));
 		if (set->map[i] == 0)
-			return (exit_error(set));
+			return (exit_error(set, "map m-alloc failed"));
 		j = 0;
 		while (j < set->map_width)
 			set->map[i][j++] = ' ';
@@ -26,12 +26,12 @@ int	init_map(t_set *set, t_list *lst)
 	return (1);
 }
 
-int	fill_map(t_set *set, t_list *lst)
+int		fill_map(t_set *set, t_list *lst)
 {
-	int i;
-	int j;
-	char *line;
-	int dir_count;
+	int		i;
+	int		j;
+	char	*line;
+	int		dir_count;
 
 	i = -1;
 	dir_count = 0;
@@ -42,18 +42,18 @@ int	fill_map(t_set *set, t_list *lst)
 		while (++j < (int)ft_strlen(line))
 		{
 			if (is_map_arg(line[j]) == -1)
-				return (exit_error(set));
+				return (exit_error(set, "incorrect map argument confirmed"));
 			set->map[i][j] = line[j];
 			init_direction(set, i, j, &dir_count);
 		}
 		lst = lst->next;
 	}
 	if (dir_count == 0 || dir_count > 1)
-		return (exit_error(set));
+		return (exit_error(set, "incorrect number of player direction"));
 	return (1);
 }
 
-int	check_valid_map(t_set *set)
+int		check_valid_map(t_set *set)
 {
 	int i;
 	int j;
@@ -67,13 +67,13 @@ int	check_valid_map(t_set *set)
 			if (set->map[i][j] != ' ')
 			{
 				if (!up_test(set, i, j))
-					return (exit_error(set));
+					return (exit_error(set, "map validity not guaranteed"));
 				if (!down_test(set, i, j))
-					return (exit_error(set));
+					return (exit_error(set, "map validity not guaranteed"));
 				if (!left_test(set, i, j))
-					return (exit_error(set));
+					return (exit_error(set, "map validity not guaranteed"));
 				if (!rigth_test(set, i, j))
-					return (exit_error(set));
+					return (exit_error(set, "map validity not guaranteed"));
 			}
 			j++;
 		}
@@ -82,19 +82,19 @@ int	check_valid_map(t_set *set)
 	return (1);
 }
 
-int	parse_map(t_set *set, t_list *lst)
+int		parse_map(t_set *set, t_list *lst)
 {
 	if (!init_map(set, lst))
-		return (exit_error(set));
+		return (exit_error(set, "map initiation failed"));
 	if (!fill_map(set, lst))
-		return (exit_error(set));
+		return (exit_error(set, "map filling failed"));
 	ft_lstclear(&lst, free);
 	if (!check_valid_map(set))
-		return (exit_error(set));
+		return (exit_error(set, "map validity not guaranteed"));
 	return (1);
 }
 
-int	read_map(t_set *set, char *line)
+int		read_map(t_set *set, char *line)
 {
 	t_list	*lst;
 	int		begun;

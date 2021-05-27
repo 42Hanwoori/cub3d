@@ -10,20 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 256
-#endif
+# include <unistd.h>
+# include <stdio.h>
+# include <string.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include "libft.h"
 
-#ifndef OPEN_SIZE
-#define OPEN_SIZE 256
-#endif
+# define BUFFER_SIZE 256
+# define OPEN_SIZE 256
 
 int		submit_and_trim(int i, int j, char **draw, char **line);
 int		check_nl_and_exe(char **draw, char **line);
@@ -32,3 +30,5 @@ int		all_read(char **draw, char **line);
 size_t	ft_strlen(const char *s);
 char	*strjoin(char *dst, char *src);
 int		get_next_line(int fd, char **line);
+
+#endif

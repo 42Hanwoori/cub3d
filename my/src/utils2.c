@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int	cal_floor_ceiling_color(t_color color)
+int		cal_floor_ceiling_color(t_color color)
 {
 	int	res;
 
@@ -21,7 +21,7 @@ int		num_only(char *s)
 	return (1);
 }
 
-int	split_len(char **split)
+int		split_len(char **split)
 {
 	int i;
 

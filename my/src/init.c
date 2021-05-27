@@ -27,6 +27,7 @@ void	init_info(t_set *set, t_color *color, t_color *color2)
 	set->sprite_texture = 0;
 	set->sprite = 0;
 	set->num_sprite = 0;
+	set->fov = 60 * PI / 180;
 	color->red = -1;
 	color->green = -1;
 	color->blue = -1;

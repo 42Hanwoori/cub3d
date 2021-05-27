@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int	check_complete(t_set *set)
+int		check_complete(t_set *set)
 {
 	if (set->width != -1 && set->height != -1 \
 	&& set->north != 0 \
@@ -33,14 +33,13 @@ int		get_max_line_size(t_list *lst)
 	return (max);
 }
 
-
 int		check_init(t_set *set)
 {
 	if (!set->width || !set->height || !set->map_width ||\
 		!set->map_height || !set->north ||\
 		!set->south || !set->west ||\
-		!set->east  ||!set->sprite_texture)
-		return (exit_error(set));
+		!set->east || !set->sprite_texture)
+		return (exit_error(set, "not initiated enough"));
 	return (1);
 }
 

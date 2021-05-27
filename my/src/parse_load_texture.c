@@ -1,4 +1,4 @@
-#include    "cub3d.h"
+#include "cub3d.h"
 
 int		init_texture(t_set *set)
 {
@@ -6,13 +6,13 @@ int		init_texture(t_set *set)
 	int	j;
 
 	if (!(set->texture = (int **)malloc(sizeof(int *) * 5)))
-		return (exit_error(set));
+		return (exit_error(set, "texture m-alloc failed"));
 	i = 0;
 	while (i < 5)
 	{
 		if (!(set->texture[i] =\
 				(int *)malloc(sizeof(int) * (TEXTURE_HEIGHT * TEXTURE_WIDTH))))
-			return (exit_error(set));
+			return (exit_error(set, "texture m-alloc failed"));
 		j = 0;
 		while (j < TEXTURE_HEIGHT * TEXTURE_WIDTH)
 		{
@@ -56,15 +56,15 @@ void	check_texture_file_exists(t_set *set)
 	int	sp;
 
 	if ((we = open(set->west, O_RDONLY)) == -1)
-		exit_error(set);
+		exit_error(set, "no west texture file confirmed");
 	if ((ea = open(set->east, O_RDONLY)) == -1)
-		exit_error(set);
+		exit_error(set, "no east texture file confirmed");
 	if ((so = open(set->south, O_RDONLY)) == -1)
-		exit_error(set);
+		exit_error(set, "no south texture file confirmed");
 	if ((no = open(set->north, O_RDONLY)) == -1)
-		exit_error(set);
+		exit_error(set, "no north texture file confirmed");
 	if ((sp = open(set->sprite_texture, O_RDONLY)) == -1)
-		exit_error(set);
+		exit_error(set, "no sprite texture file confirmed");
 	close(we);
 	close(so);
 	close(ea);

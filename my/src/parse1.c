@@ -1,17 +1,17 @@
 #include "cub3d.h"
 
-int	get_screen_size(t_set *set, char **splits)
+int		get_screen_size(t_set *set, char **splits)
 {
 	int max_width;
 	int max_height;
-	
+
 	mlx_get_screen_size(set->mlx, &max_width, &max_height);
 	if ((set->width != 0 && set->height != 0) || (split_len(splits) != 3)\
-	 || !(num_only(splits[1]) && num_only(splits[2])) \
-	 || splits[1][0] == '0' || splits[2][0] == '0')
+	|| !(num_only(splits[1]) && num_only(splits[2])) \
+	|| splits[1][0] == '0' || splits[2][0] == '0')
 	{
 		free_double_array(splits);
-		return(-1);
+		return (-1);
 	}
 	set->width = ft_atoi(splits[1]);
 	set->height = ft_atoi(splits[2]);
@@ -23,7 +23,7 @@ int	get_screen_size(t_set *set, char **splits)
 	return (0);
 }
 
-int		check_info(t_set *set,char **splits)
+int		check_info(t_set *set, char **splits)
 {
 	if (ft_strcmp(*splits, "R") == 0)
 		return (get_screen_size(set, splits));
@@ -43,17 +43,17 @@ int		check_info(t_set *set,char **splits)
 		return (get_color(set, splits));
 	else if (*splits[0] == '\0')
 		return (0);
-	return (1); 
+	return (1);
 }
 
-int	parse_line(t_set *set ,char *line)
+int		parse_line(t_set *set, char *line)
 {
 	char	**splits;
 	int		i;
 
 	i = 0;
 	splits = ft_split(line, ' ');
-	if (*splits == 0)	
+	if (*splits == 0)
 	{
 		free(splits);
 		return (0);
@@ -73,21 +73,21 @@ int		parse_cub(t_set *set, char *path)
 		if ((parse_line(set, line)) == -1)
 		{
 			close(set->fd);
-			return (exit_error(set));
+			return (exit_error(set, "cubfile configuration miss"));
 		}
 		free(line);
 		line = 0;
 		if (check_complete(set) == 1)
-			break;
+			break ;
 	}
 	if (!check_complete(set))
-		return (exit_error(set));
+		return (exit_error(set, "not enough information"));
 	if (!read_map(set, line))
-		return (exit_error(set));
+		return (exit_error(set, "wrong map"));
 	if (!check_init(set))
-		return (exit_error(set));
+		return (exit_error(set, "not initiated enough"));
 	if (!set_sprite(set))
-		return (exit_error(set));
+		return (exit_error(set, "sprite m-alloc failed"));
 	return (1);
 }
 
@@ -95,11 +95,11 @@ int		set_information(t_set *set, char *path)
 {
 	init_player(&set->player);
 	if (!parse_cub(set, path))
-		return (exit_error(set));
+		return (exit_error(set, "cubfile parsing failed"));
 	init_player_direction(set);
 	set->mlx = mlx_init();
 	if (!init_texture(set))
-		return (exit_error(set));
+		return (exit_error(set, "texture initiation failed"));
 	load_texture(set);
 	set->ray = (t_ray *)malloc(sizeof(t_ray) * set->width);
 	set->img.img = mlx_new_image(set->mlx, set->width, set->height);

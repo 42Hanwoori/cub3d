@@ -10,9 +10,10 @@ void	free_double_array(char **s)
 	free(s);
 }
 
-int exit_error(t_set *set)
+int		exit_error(t_set *set, char *s)
 {
 	ft_putstr("Error\n");
+	ft_putstr(s);
 	if (set->fd)
 		close(set->fd);
 	exit(1);

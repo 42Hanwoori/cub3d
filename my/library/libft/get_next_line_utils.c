@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: whan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,17 +12,6 @@
 
 #include "get_next_line.h"
 #include "libft.h"
-// size_t	ft_strlen(const char *s)
-// {
-// 	size_t n;
-
-// 	if (!s)
-// 		return (0);
-// 	n = 0;
-// 	while (s[n])
-// 		n++;
-// 	return (n);
-// }
 
 char	*strjoin(char *dst, char *src)
 {
@@ -46,5 +35,5 @@ char	*strjoin(char *dst, char *src)
 	if (dst)
 		free(dst);
 	dst = tmp;
-	return dst;
+	return (dst);
 }

@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-int		key_release(int key_code, t_player *player) // 놓은 키에 따라 해당되는 값을 적용한다.
+int		key_release(int key_code, t_player *player)
 {
 	if (key_code == KEY_W)
 		player->walk_dir = 0;
@@ -19,7 +19,7 @@ int		key_release(int key_code, t_player *player) // 놓은 키에 따라 해당�
 	else if (key_code == KEY_LEFT)
 		player->turn_dir = 0;
 	else if (key_code == KEY_RIGHT)
-		player->turn_dir = 0;	
+		player->turn_dir = 0;
 	return (1);
 }
 
@@ -42,9 +42,9 @@ int		key_press(int key_code, t_set *set)
 	else if (key_code == KEY_LEFT)
 		set->player.turn_dir = -1;
 	else if (key_code == KEY_RIGHT)
-		set->player.turn_dir = 1;	
+		set->player.turn_dir = 1;
 	else if (key_code == KEY_ESC)
-	  	ft_close();
+		ft_close();
 	return (1);
 }
 
@@ -74,10 +74,8 @@ void	update_player(t_set *set, t_player *player)
 int		main_loop(t_set *set)
 {
 	update_player(set, &set->player);
-
 	mlx_clear_window(set->mlx, set->win);
 	clear_window(set);
-	
 	ray_casting(set);
 	draw_3d_wall(set);
 	draw_sprite(set);
@@ -87,12 +85,12 @@ int		main_loop(t_set *set)
 
 int		process_program(t_set *set)
 {
-	set->win = mlx_new_window(set->mlx, set->width, set->height, "win_for_cub3D");
-	
+	set->win = mlx_new_window(set->mlx, set->width, set->height,
+	"win_for_cub3D");
 	mlx_hook(set->win, X_EVENT_KEY_PRESS, 0, &key_press, set);
 	mlx_hook(set->win, X_EVENT_KEY_RELEASE, 0, &key_release, &(set->player));
 	mlx_hook(set->win, X_EVENT_KEY_EXIT, 0, &ft_close, set);
-	mlx_loop_hook(set->mlx, &main_loop, set); // key가 release 되어 있는동안 main_loop 유지
+	mlx_loop_hook(set->mlx, &main_loop, set);
 	mlx_loop(set->mlx);
-	return(0);
+	return (0);
 }

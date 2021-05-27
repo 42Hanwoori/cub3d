@@ -72,10 +72,10 @@ int		get_next_line(int fd, char **line)
 	int			res;
 	int			i;
 
-	if(BUFFER_SIZE <= 0)
-		return(-1);
+	if (BUFFER_SIZE <= 0)
+		return (-1);
 	*line = 0;
-	while(1)
+	while (1)
 	{
 		if (draw[fd] != 0 && check_nl_and_exe(&draw[fd], line))
 			return (1);
